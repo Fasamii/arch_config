@@ -3,13 +3,16 @@
 import os
 import yaml
 import shutil
+import getpass
 from jinja2 import Environment, FileSystemLoader
+
+user_name = getpass.getuser()
 
 input_dir = "./templates"
 
-home_files = [
-        ".zshrc",
-        ]
+custom_files = {
+        ".zshrc": f"/home/{user_name}",
+        }
 
 home_path = input("[user home dir (enter for default)]: ")
 if home_path == "":
@@ -26,17 +29,14 @@ with open("settings.yaml") as file:
 
 env = Environment(loader=FileSystemLoader(input_dir))
 
-def process_templates(src_dir, conf_dir, home_dir, home_files):
+def process_templates(src_dir, conf_dir, custom_files):
     for root, _, files in os.walk(src_dir):
-        # print(f"root:{root} , files:{files}")
         relative_path = os.path.relpath(root, src_dir)
 
         for file in files:
-            # print(f"file:{file}")
-            print(f"{file} [{home_files}]")
-            if file in home_files:
+            if file in custom_files:
                 print(">> home file <<")
-                dest_path = os.path.join(home_dir, relative_path)
+                dest_path = os.path.join(custom_files[file], relative_path)
                 os.makedirs(dest_path, exist_ok=True)
             else:
                 print(">> conf file <<")
@@ -58,10 +58,10 @@ def process_templates(src_dir, conf_dir, home_dir, home_files):
             with open(dest_file_path, 'w') as file:
                 file.write(rendered_copntent)
 
-            # print(f"{src_file_path} -->> {dest_file_path}")
+            print(f"{src_file_path} -->> {dest_file_path}")
 
 if os.path.exists(config_path):
     shutil.rmtree(config_path)
 os.makedirs(config_path)
 
-process_templates(input_dir, config_path, home_path, home_files)
+process_templates(input_dir, config_path, custom_files)
