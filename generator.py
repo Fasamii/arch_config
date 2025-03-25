@@ -8,21 +8,15 @@ from jinja2 import Environment, FileSystemLoader
 
 user_name = getpass.getuser()
 
-input_dir = "./templates"
+input_dir = "./config"
 
 custom_files = {
         ".zshrc": f"/home/{user_name}",
         }
 
-home_path = input("[user home dir (enter for default)]: ")
-if home_path == "":
-    home_path = "./home"
-
 config_path = input("[user home dir (enter for default)]: ")
 if config_path == "":
     config_path = "./result"
-
-print(f"{home_path} {config_path}")
 
 with open("settings.yaml") as file:
     settings = yaml.safe_load(file)
