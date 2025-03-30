@@ -1,0 +1,20 @@
+colors:
+  red: "ff0000"
+  green: "00ff00"
+  blue: "0000ff"
+  magenta: "ff00ff"
+  borders_active: "ff0000"
+  borders_inactive: "202020"
+  main: "000000"
+  second: "ffffff"
+
+shapes:
+  borders: "1"
+  rouding: "0"
+
+apps:
+  terminal: "kitty -d ~/workspace"
+  browser: "firefox"
+  file_browser: "kitty -d ~/workaspace -e ranger"
+  music: "spotify"
+  launcher: "bemenu-run -b -H 24 -B 1 -R 0 --fn 'FiraCode 12' -i --bdr '##ffffff' --tf '##000000' --tb '##000000' --fb '##000000' --ff '##ffffff' --nb '##000000' --hb '##000000' --fbb '##000000' --sb '##000000'"
