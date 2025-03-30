@@ -1,12 +1,8 @@
 #!/usr/bin/python
-
 import os
 import yaml
-import shutil
 import getpass
 from jinja2 import Environment, FileSystemLoader
-
-
 
 user_name = getpass.getuser()
 
@@ -16,11 +12,12 @@ custom_files = {
         ".zshrc": f"/home/{user_name}",
         }
 
-config_path = input("[user config dir (enter for default)]: ")
+config_path_default = "./result"
+config_path = input(f"[user config dir (default: \x1b[38;5;44m{config_path_default}\x1b[0m)]: ")
 if config_path == "":
-    config_path = "./result"
+    config_path = config_path_default
 
-if input("\x1b[38;5;1m!!contents of that dir will be removed in order to write new config!!\x1b[0m are you sure? [y/n]:") != 'y':
+if input("\x1b[38;5;1m!!contents of that dir will be overwriten by config templates evaluations!!\x1b[0m are you sure? [\x1b[38;5;44my/n\x1b[0m]:") != 'y':
     quit()
 
 with open("values.yaml", encoding="latin1") as file:
@@ -74,11 +71,14 @@ def process_templates(src_dir, conf_dir, custom_files):
             with open(dest_file_path, 'w') as file:
                 file.write(rendered_copntent)
 
-            print(f"{src_file_path} -->> {dest_file_path}")
+            print(f"{src_file_path} \x1b[38;5;44m-->>\x1b[0m {dest_file_path}")
 
-if os.path.exists(config_path):
-    shutil.rmtree(config_path)
+# if os.path.exists(config_path):
+    # shutil.rmtree(config_path)
 
-os.makedirs(config_path)
+if not os.path.exists(config_path):
+    os.makedirs(config_path)
 
 process_templates(input_dir, config_path, custom_files)
+
+os.system("hyprctl reload > /dev/null")
